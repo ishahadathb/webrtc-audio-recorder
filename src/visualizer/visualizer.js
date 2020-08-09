@@ -19,10 +19,12 @@ export default function visualize(stream) {
   const bufferLength = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
 
+  canvasCtx.fillStyle = "rgb(2, 2, 4)";
   function draw() {
     canvasCtx.clearRect(0, 0, canvas.height, canvas.width);
     analyser.getByteFrequencyData(dataArray);
     requestAnimationFrame(draw);
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
     const x = canvas.width / 2;
     const y = canvas.height / 2;
@@ -40,9 +42,11 @@ export default function visualize(stream) {
       const freq = dataArray[i];
 
       canvasCtx.save();
+      var hue = (i / bufferLength) * 360;
+      canvasCtx.fillStyle = "hsl(" + hue + ", 100%, 50%)";
       canvasCtx.translate(outerX, outerY);
       canvasCtx.rotate(radian);
-      canvasCtx.fillRect(0, y, 10, 5 + freq);
+      canvasCtx.fillRect(0, y, 10, freq);
       canvasCtx.restore();
     }
   }
